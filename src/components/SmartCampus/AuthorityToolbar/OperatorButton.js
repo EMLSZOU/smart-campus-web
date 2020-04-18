@@ -13,7 +13,7 @@ import PropTypes from 'prop-types';
 class OperatorButton extends PureComponent {
   /**
    *  下拉操作按钮
-   * @param dropdown
+   * @param dropdownList
    * @param authorityMenus
    */
   renderDropdown(dropdownList, authorityMenus) {
@@ -37,7 +37,7 @@ class OperatorButton extends PureComponent {
     return (
       <Dropdown overlay={menu}>
         <Button>
-          更多操作 <Icon type="down" />
+          批量操作 <Icon type="down" />
         </Button>
       </Dropdown>
     );
@@ -58,7 +58,7 @@ class OperatorButton extends PureComponent {
         return null;
       }
       return (
-        <Button icon={icon} key={operatorKey} type={type} onClick={type}>
+        <Button icon={icon} key={operatorKey} type={type} onClick={onClick}>
           {text}
         </Button>
       );

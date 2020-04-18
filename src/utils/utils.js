@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React from 'react';
 import nzh from 'nzh/cn';
-import { parse, stringify } from 'qs';
+import {parse, stringify} from 'qs';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -181,3 +181,166 @@ export function formatWan(val) {
 export function isAntdPro() {
   return window.location.hostname === 'preview.pro.ant.design';
 }
+
+/**
+ *   最小宽度
+ * @param minWidth
+ */
+export function modalWidth(minWidth) {
+  if (window.innerWidth <= minWidth) {
+    return window.innerWidth;
+  }
+  return minWidth;
+}
+
+
+/**
+ *  将树结构的数据转换为map
+ * @param treeData
+ * @param idToModelMap
+ * @param pidToModelsMap
+ * @param pid
+ */
+export function treeDataToMap(treeData, idToModelMap, pidToModelsMap, pid = 'root') {
+  if ((treeData || []).length <= 0) {
+    return
+  }
+  pidToModelsMap.set(pid, treeData);
+  treeData.forEach(item => {
+    const {children, id} = item;
+    idToModelMap.set(id, item);
+    treeDataToMap(children, idToModelMap, pidToModelsMap, id);
+  });
+}
+
+/**
+ * 　　删除数组中的元素
+ * @param arr
+ * @param val
+ */
+export function arrRemove(arr, val) {
+  const index = arr.indexOf(val);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+}
+
+/**
+ *  获取当前节点的所有父节点
+ * @param idToTreeMap
+ * @param pidToTreesMap
+ * @param record
+ */
+export function getTreePids(idToTreeMap, pidToTreesMap, record) {
+  if (!record) {
+    return [];
+  }
+  const pids = [];
+  let pRecord = record;
+  do {
+    pRecord = idToTreeMap.get(pRecord.pid, undefined);
+    if (pRecord) {
+      pids.push(pRecord.id);
+    }
+  } while (pRecord !== undefined);
+  return pids;
+}
+
+/**
+ *  所有子节点
+ * @param idToTreeMap
+ * @param pidToTreesMap
+ * @param record
+ */
+export function getTreeChildrenIds(idToTreeMap, pidToTreesMap, record) {
+  if (!record) {
+    return [];
+  }
+
+  const getChildren = (children) => {
+    if ((children || []).length <= 0) {
+      return [];
+    }
+    const nChildren = [];
+    children.forEach(item => {
+      nChildren.push(...(pidToTreesMap.get(item.id) || []));
+    });
+    return nChildren;
+  };
+
+  const childrenIds = [];
+  let children = (pidToTreesMap.get(record.id) || []);
+  do {
+    childrenIds.push(...children.map(item => item.id));
+    children = getChildren(children);
+  } while ((children || []).length > 0);
+
+  return childrenIds;
+}
+
+/**
+ *   树结构数据级联选择和取消选择的处理方法
+ *    一个元素选择，则父节点和子节点都要选择
+ *    一个元素取消，子节点都要取消，父节点在所有子节点取消后也取消
+ * @param idToTreeMap
+ * @param pidToTreesMap
+ * @param selectedRowKeys
+ * @param record
+ * @param selected
+ */
+export function treePidAndChildRecords(idToTreeMap, pidToTreesMap, selectedRowKeys, record, selected) {
+  // 递归退出条件
+  if (!record) {
+    return [];
+  }
+
+  const allPids = getTreePids(idToTreeMap, pidToTreesMap, record);
+  const allChildrenIds = getTreeChildrenIds(idToTreeMap, pidToTreesMap, record);
+
+  if (selected === true) {
+    if (!selectedRowKeys.includes(record.id)) {
+      selectedRowKeys.push(record.id);
+    }
+    allPids.forEach(id => {
+      if (!selectedRowKeys.includes(id)) {
+        selectedRowKeys.push(id)
+      }
+    });
+    allChildrenIds.forEach(id => {
+      if (!selectedRowKeys.includes(id)) {
+        selectedRowKeys.push(id)
+      }
+    })
+  } else {
+    // 删除本身
+    arrRemove(selectedRowKeys, record.id);
+    // 子节点全部取消
+    allChildrenIds.forEach(id => arrRemove(selectedRowKeys, id));
+    // 父节点如果没有子节点了就取消
+    allPids.forEach(id => {
+      const pChildren = pidToTreesMap.get(id, []);
+      if (!pChildren.find(item => selectedRowKeys.includes(item.id))) {
+        arrRemove(selectedRowKeys, id);
+      }
+    })
+  }
+}
+
+/**
+ *   获取树节点的key
+ * @param treeData
+ * @param key
+ */
+export function getTreeKeys(treeData, key) {
+  if ((treeData || []).length <= 0) {
+    return [];
+  }
+  const keys = [];
+  treeData.forEach(item => {
+    keys.push(item[key]);
+    keys.push(...getTreeKeys(item.children, key))
+  });
+  return keys;
+}
+
+

@@ -1,7 +1,7 @@
 // Demo自带的
 const testRoutes = [
   // dashboard
-  { path: '/', redirect: '/dashboard/analysis' },
+  {path: '/', redirect: '/dashboard/analysis'},
   {
     path: '/dashboard',
     name: 'dashboard',
@@ -150,7 +150,7 @@ const testRoutes = [
         name: 'success',
         component: './Result/Success',
       },
-      { path: '/result/fail', name: 'fail', component: './Result/Error' },
+      {path: '/result/fail', name: 'fail', component: './Result/Error'},
     ],
   },
   {
@@ -241,176 +241,28 @@ const testRoutes = [
   },
 ];
 
+// 系统设置
+const sysManageRoutes = require('../src/pages/SystemManage/config/routes');
+// 人员管理
+const humanManageRoutes = require('../src/pages/HumanManage/config/routes');
+// 门禁管理
+const accessControlRoutes = require('../src/pages/AccessControl/config/routes');
+// 信息录入
+const infoEntryRoutes = require('../src/pages/InfoEntry/config/routes');
+// 办公
+const workOaRoutes = require('../src/pages/WorkOA/config/routes');
 // 智慧校园的路由
 const appRoutes = [
-  { path: '/', redirect: '/workplace' },
+  {path: '/', redirect: '/workplace'},
   {
     path: '/workplace',
     component: './Portal/Workplace',
   },
-  // 系统设置
-  {
-    path: '/sys-manage',
-    name: 'sys-manage',
-    //   icon: 'dashboard',
-    routes: [
-      // 租户管理
-      {
-        path: '/sys-manage/tenant-manage',
-        name: 'tenant-manage',
-        routes: [
-          {
-            path: '/sys-manage/tenant-manage/region',
-            name: 'region',
-            component: './SystemManage/Region',
-          },
-          {
-            path: '/sys-manage/tenant-manage/school',
-            name: 'school',
-            component: './SystemManage/School',
-          },
-        ],
-      },
-      // 权限管理
-      {
-        path: '/sys-manage/authority-manage',
-        name: 'authority-manage',
-        routes: [
-          {
-            path: '/sys-manage/authority-manage/pc-menu',
-            name: 'pc-menu',
-            component: './SystemManage/PcMenu',
-          },
-          {
-            path: '/sys-manage/authority-manage/app-menu',
-            name: 'app-menu',
-            component: './SystemManage/AppMenu',
-          },
-          {
-            path: '/sys-manage/authority-manage/authority-group',
-            name: 'authority-group',
-            component: './Dashboard/Monitor',
-          },
-        ],
-      },
-    ],
-  },
-  // 人员管理
-  {
-    path: '/personnel-manage',
-    name: 'personnel-manage',
-    routes: [
-      // 职工管理
-      {
-        path: '/personnel-manage/staff-manage',
-        name: 'staff-manage',
-        routes: [
-          {
-            path: '/personnel-manage/staff-manage/staff-group',
-            name: 'staff-group',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/personnel-manage/staff-manage/staff-user',
-            name: 'staff-user',
-            component: './Dashboard/Monitor',
-          },
-        ],
-      },
-      // 学生管理
-      {
-        path: '/personnel-manage/student-manage',
-        name: 'student-manage',
-        routes: [
-          {
-            path: '/personnel-manage/student-manage/student-group',
-            name: 'student-group',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/personnel-manage/student-manage/student',
-            name: 'student',
-            component: './Dashboard/Monitor',
-          },
-        ],
-      },
-    ],
-  },
-  //门禁管理
-  {
-    path: '/access-control',
-    name: 'access-control',
-    routes: [
-      // 门禁权限
-      {
-        path: '/access-control/access-authority',
-        name: 'access-authority',
-        routes: [
-          {
-            path: '/access-control/access-authority/strategy',
-            name: 'strategy',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/access-control/access-authority/control',
-            name: 'control',
-            component: './Dashboard/Monitor',
-          },
-          {
-            path: '/access-control/access-authority/examine',
-            name: 'examine',
-            component: './Dashboard/Monitor',
-          },
-        ],
-      },
-      // 出入记录
-      {
-        path: '/access-control/access-record',
-        name: 'access-record',
-        routes: [
-          {
-            path: '/access-control/access-record/personnel',
-            name: 'personnel',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/access-control/access-record/car',
-            name: 'car',
-            component: './Dashboard/Monitor',
-          },
-          {
-            path: '/access-control/access-record/statistics',
-            name: 'statistics',
-            component: './Dashboard/Monitor',
-          },
-        ],
-      },
-    ],
-  },
-  // 信息录入
-  {
-    path: '/info-entry',
-    name: 'info-entry',
-    routes: [
-      // 人员特征
-      {
-        path: '/info-entry/personnel-feature',
-        name: 'personnel-feature',
-        routes: [
-          {
-            path: '/info-entry/personnel-feature/card',
-            name: 'card',
-            component: './Dashboard/Analysis',
-          },
-          {
-            path: '/info-entry/personnel-feature/face',
-            name: 'face',
-            component: './Dashboard/Monitor',
-          },
-        ],
-      },
-    ],
-  },
+  ...sysManageRoutes,
+  ...humanManageRoutes,
+  ...accessControlRoutes,
+  ...infoEntryRoutes,
+  ...workOaRoutes,
   // 智能设备
   {
     path: '/device-manage',
@@ -443,10 +295,10 @@ export default [
     path: '/user',
     component: '../layouts/UserLayout',
     routes: [
-      { path: '/user', redirect: '/user/login' },
-      { path: '/user/login', component: './User/Login' },
-      { path: '/user/register', component: './User/Register' },
-      { path: '/user/register-result', component: './User/RegisterResult' },
+      {path: '/user', redirect: '/user/login'},
+      {path: '/user/login', component: './User/Login'},
+      {path: '/user/register', component: './User/Register'},
+      {path: '/user/register-result', component: './User/RegisterResult'},
     ],
   },
   // app

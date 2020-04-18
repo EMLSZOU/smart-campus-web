@@ -27,7 +27,7 @@ const links = [
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2020 魅蓝科技有限公司
+    Copyright <Icon type="copyright" /> 2020 XXXXXXXXXX
   </Fragment>
 );
 
@@ -63,7 +63,7 @@ class UserLayout extends React.PureComponent {
           </div>
           {children}
         </div>
-        <GlobalFooter links={links} copyright={copyright} />
+        {/*<GlobalFooter links={links} copyright={copyright} />*/}
       </div>
     );
   }
