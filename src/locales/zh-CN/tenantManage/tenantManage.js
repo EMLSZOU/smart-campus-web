@@ -34,11 +34,11 @@ export default {
 
   'menu.work': '办公OA',
   'menu.work.flow': '审批流程',
-  'menu.work.flow.entry': '新建流程',
   'menu.work.flow.record': '流程列表',
+  'menu.work.flow.entry': '流程填写',
+  'menu.work.flow.entry.guard': '门禁申请',
 
   'menu.device-manage': '智能设备',
   'menu.device-manage.access-device': '门禁设备',
-  'menu.device-manage.access-device.gate': '人行门闸',
-  'menu.device-manage.access-device.car-gate': '车行门闸',
+  'menu.device-manage.access-device.gate': '门闸设备',
 };

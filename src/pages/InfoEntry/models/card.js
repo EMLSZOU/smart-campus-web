@@ -38,7 +38,7 @@ export default {
      * @param call
      * @param put
      */* deleteCardByIds({payload: {cardIds}}, {call, put}) {
-      yield call(cardService.deleteCardByIds);
+      yield call(cardService.deleteCardByIds,cardIds);
     },
 
     /**

@@ -13,6 +13,10 @@ const routes = [
             name: 'record',
             component: 'WorkOA/FlowRecord',
           },
+          {
+            path: '/work/flow/guard-entry',
+            component: 'WorkOA/GuardFlowEntry',
+          },
         ],
       },
     ],

@@ -3,18 +3,19 @@ import {connect} from 'dva';
 import PageHeaderWrapper from '@/components/PageHeaderWrapper';
 import {Card, message, Modal} from 'antd';
 import styles from '@/pages/common.less';
-import SearchForm from '@/pages/SystemManage/components/region/SearchForm';
+import SearchForm from './components/region/SearchForm';
 import OperatorButton from '@/components/SmartCampus/AuthorityToolbar/OperatorButton';
 import RegionTable from '@/pages/SystemManage/components/region/RegionTable';
 import appConfig from "@/config/appConfig";
-import RegionModal from "@/pages/SystemManage/components/region/RegionModal";
+import RegionModal from "./components/region/RegionModal";
 
 /**
  *  区域管理页面
  */
-@connect(({loading, region}) => ({
+@connect(({loading, region, authorityTemplate}) => ({
   loading,
   region,
+  authorityTemplate
 }))
 class Region extends PureComponent {
   state = {
@@ -24,6 +25,8 @@ class Region extends PureComponent {
     regionModalVisible: false,// 新增修改窗口
     regionModalOpenType: 'add',// 操作类型
     regionModel: {}, // 弹窗数据
+    mDisabled: false,// 弹窗按钮是否可用
+    currentStep: 0, // 弹窗步骤
   };
 
   componentDidMount() {
@@ -36,6 +39,11 @@ class Region extends PureComponent {
         pageSize: appConfig.PAGE_SIZE
       }
     });
+    // 权限模板列表
+    dispatch({
+      type: "authorityTemplate/getAuthorityTemplateList",
+      payload: {}
+    })
   };
 
   /**
@@ -116,12 +124,16 @@ class Region extends PureComponent {
   /**
    *  打开新增弹窗
    */
-  openRegionModal = (regionModalOpenType, regionModel) => {
+  openRegionModal = (regionModalOpenType, regionModel, currentStep = 0, mDisabled = false) => {
+    // 初始化弹窗的数据
+    this.regionModal.onInitDataSource(regionModel);
     // 打开弹窗
     this.setState({
       regionModalOpenType,
       regionModel,
       regionModalVisible: true,
+      currentStep,
+      mDisabled
     })
   };
 
@@ -177,11 +189,11 @@ class Region extends PureComponent {
           }
         }
       }).then(() => {
+        // 关闭窗口
+        this.closeRegionModal();
         this.onTablePageChange(openType === 'edit' ? current : 1, pageSize);
       });
     }
-    // 关闭窗口
-    this.closeRegionModal();
   };
 
   /**
@@ -243,6 +255,9 @@ class Region extends PureComponent {
         current,
         pageSize
       },
+      authorityTemplate: {
+        authorityTemplateList
+      },
       loading
     } = this.props;
 
@@ -261,7 +276,7 @@ class Region extends PureComponent {
       loading: loading.effects['region/getRegionList'],
       selectedRowKeys: this.state.selectedRowKeys,
       onTableSelectChange: this.onTableSelectChange,
-      onShowView: (record) => this.openRegionModal('view', record),
+      onShowView: (record) => this.openRegionModal('view', record, 1, true),
       current,
       pageSize,
       total,
@@ -273,7 +288,11 @@ class Region extends PureComponent {
     const regionModalProps = {
       visible: this.state.regionModalVisible,
       openType: this.state.regionModalOpenType,
-      dataSource: this.state.regionModel,
+      mDisabled: this.state.mDisabled,
+      currentStep: this.state.currentStep,
+      onCurrentStepChange: (currentStep) => this.setState({currentStep}),
+      authorityTemplateList,
+      confirmLoading: loading.effects['region/saveRegionData'],
       onOk: this.onRegionModalOk,
       onCancel: this.closeRegionModal,
     };
@@ -291,7 +310,7 @@ class Region extends PureComponent {
             <RegionTable {...regionTableProps} />
           </div>
         </Card>
-        <RegionModal {...regionModalProps} />
+        <RegionModal {...regionModalProps} onRef={r => this.regionModal = r}/>
       </PageHeaderWrapper>
     );
   }
