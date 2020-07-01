@@ -82,11 +82,25 @@ export async function moveGroupToGroup(sourceIds, targetId) {
  * @returns {Promise<void>}
  */
 export async function moveUserToGroup(userIds, targetId) {
-  return request(config.staffGroupApi.copyGroupToGroup, {
+  return request(config.staffGroupApi.moveUserToGroup, {
     method: 'POST',
     params: {
       userIds: (userIds || []).join(","),
       targetId,
+    }
+  });
+}
+
+/**
+ *  根据id获取分组信息
+ * @param groupId
+ * @returns {Promise<void>}
+ */
+export async function getUserGroupById(groupId) {
+  return request(config.staffGroupApi.getUserGroupById, {
+    method: 'GET',
+    params: {
+      groupId
     }
   });
 }

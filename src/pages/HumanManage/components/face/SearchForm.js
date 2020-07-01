@@ -1,14 +1,13 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {Button, Col, Form, Input, Row, Select} from 'antd';
+import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select} from 'antd';
 import styles from '@/pages/List/TableList.less';
-import enums from '../../config/enums';
 
 const FormItem = Form.Item;
 const {Option} = Select;
 
 @Form.create()
-class SearchForm extends PureComponent {
+class SearchForm extends React.PureComponent {
   state = {
     expandForm: false, // 是否展开搜索框
   };
@@ -58,21 +57,17 @@ class SearchForm extends PureComponent {
     const {
       form: {getFieldDecorator},
     } = this.props;
-    const strategyStatusOptions = Object.values(enums.StrategyStatus).map(({key, value}) => <Select.Option key={key}
-                                                                                                           value={key}>{value}</Select.Option>);
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
-          <Col md={9} sm={24}>
-            <FormItem label="策略名称">
-              {getFieldDecorator('strategyName')(<Input allowClear placeholder="请输入"/>)}
+          <Col md={8} sm={24}>
+            <FormItem label="姓名">
+              {getFieldDecorator('name')(<Input placeholder="请输入"/>)}
             </FormItem>
           </Col>
-          <Col md={7} sm={24}>
-            <FormItem label="状态">
-              {getFieldDecorator('strategyStatus')(<Select allowClear placeholder="请输入">
-                {strategyStatusOptions}
-              </Select>)}
+          <Col md={8} sm={24}>
+            <FormItem label="编号">
+              {getFieldDecorator('userCode')(<Input placeholder="请输入工号，学号等"/>)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>

@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {Button, Col, DatePicker, Form, Icon, Input, InputNumber, Row, Select} from 'antd';
 import styles from '@/pages/List/TableList.less';
+import enums from "../../config/enums";
 
 const FormItem = Form.Item;
 const {Option} = Select;
@@ -68,6 +69,8 @@ class SearchForm extends PureComponent {
     const {
       form: {getFieldDecorator},
     } = this.props;
+    const userTypeOptions = Object.keys(enums.UserTypes).map(key => <Select.Option key={key}
+                                                                                   value={key}>{enums.UserTypes[key]}</Select.Option>);
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{md: 8, lg: 24, xl: 48}}>
@@ -78,14 +81,13 @@ class SearchForm extends PureComponent {
           </Col>
           <Col md={6} sm={24}>
             <FormItem label="证件号码">
-              {getFieldDecorator('code')(<Input allowClear placeholder="请输入证件号码、工号"/>)}
+              {getFieldDecorator('userIdentity')(<Input allowClear placeholder="请输入证件号码、工号"/>)}
             </FormItem>
           </Col>
           <Col md={5} sm={24}>
             <FormItem label="用户类型">
               {getFieldDecorator('userType')(<Select allowClear placeholder="请输入">
-                <Select.Option key={"1"} value={"1"}>{"教师"}</Select.Option>
-                <Select.Option key={"2"} value={"2"}>{"职员"}</Select.Option>
+                {userTypeOptions}
               </Select>)}
             </FormItem>
           </Col>
